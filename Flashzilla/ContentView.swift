@@ -10,7 +10,79 @@ import SwiftUI
 struct ContentView: View {
 
     var body: some View {
-        Text("Hello, world!")
+        Text("Hello, World!")
+            .padding()
+    }
+}
+
+struct ReduceTransparencyTestView: View {
+    @Environment(\.accessibilityReduceTransparency) var reduceTransparency
+
+    var body: some View {
+        Text("Hello, World!")
+            .padding()
+            .background(reduceTransparency ? Color.black : Color.black.opacity(0.5))
+            .foregroundColor(.white)
+            .clipShape(Capsule())
+    }
+}
+
+struct WithOptionalAnimationTestView: View {
+    @State private var scale: CGFloat = 1
+
+    var body: some View {
+        Text("Hello, World!")
+            .scaleEffect(scale)
+            .onTapGesture {
+                withOptionalAnimation {
+                    scale *= 1.5
+                }
+            }
+    }
+}
+
+func withOptionalAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
+    if UIAccessibility.isReduceMotionEnabled {
+        return try body()
+    } else {
+        return try withAnimation(animation, body)
+    }
+}
+
+struct ReduceMotionTestView: View {
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @State private var scale: CGFloat = 1
+
+    var body: some View {
+        Text("Hello, World!")
+            .scaleEffect(scale)
+            .onTapGesture {
+                if reduceMotion {
+                    scale *= 1.5
+                } else {
+                    withAnimation {
+                        scale *= 1.5
+                    }
+                }
+            }
+    }
+}
+
+struct DifferentiateWithoutColorTestView: View {
+    @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+
+    var body: some View {
+        HStack {
+            if differentiateWithoutColor {
+                Image(systemName: "checkmark.circle")
+            }
+
+            Text("Success")
+        }
+        .padding()
+        .background(differentiateWithoutColor ? Color.black : Color.green)
+        .foregroundColor(.white)
+        .clipShape(Capsule())
     }
 }
 
