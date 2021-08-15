@@ -9,6 +9,113 @@ import SwiftUI
 import CoreHaptics
 
 struct ContentView: View {
+
+    var body: some View {
+        VStackContentShapeHitTestingTestView()
+    }
+
+}
+
+struct VStackContentShapeHitTestingTestView: View {
+
+    var body: some View {
+        VStack {
+            Text("Hello")
+            Spacer().frame(height: 100)
+            Text("World")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            print("VStack tapped!")
+        }
+    }
+
+}
+
+struct VStackRegularHitTestingTestView: View {
+
+    var body: some View {
+        VStack {
+            Text("Hello")
+            Spacer().frame(height: 100)
+            Text("World")
+        }
+        .onTapGesture {
+            print("VStack tapped!")
+        }
+    }
+
+}
+
+struct CircleContentShapeTestView: View {
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(Color.blue)
+                .frame(width: 300, height: 300)
+                .onTapGesture {
+                    print("Rectangle tapped!")
+                }
+
+            Circle()
+                .fill(Color.red)
+                .frame(width: 300, height: 300)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    print("Circle tapped!")
+                }
+        }
+    }
+
+}
+
+struct CircleNoHitTestingTestView: View {
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(Color.blue)
+                .frame(width: 300, height: 300)
+                .onTapGesture {
+                    print("Rectangle tapped!")
+                }
+
+            Circle()
+                .fill(Color.red)
+                .frame(width: 300, height: 300)
+                .onTapGesture {
+                    print("Circle tapped!")
+                }
+                .allowsHitTesting(false)
+        }
+    }
+
+}
+
+struct RegularHitTestingTestView: View {
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .fill(Color.blue)
+                .frame(width: 300, height: 300)
+                .onTapGesture {
+                    print("Rectangle tapped!")
+                }
+
+            Circle()
+                .fill(Color.red)
+                .frame(width: 300, height: 300)
+                .onTapGesture {
+                    print("Circle tapped!")
+                }
+        }
+    }
+
+}
+
+struct ComplexSuccessTestView: View {
     @State private var engine: CHHapticEngine?
 
     var body: some View {
